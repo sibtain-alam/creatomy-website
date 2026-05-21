@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Creatomy | Luxury Furniture & Intentional Spaces</title>
+    
+    <!-- Google Fonts: Cormorant Garamond & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- GSAP for Scroll Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Shared Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="logo">CREATOMY</a>
+        <div class="nav-links">
+            <a href="index.html#hero">New</a>
+            <a href="index.html#living">Living</a>
+            <a href="index.html#little-wishes">Little Wishes</a>
+            <a href="index.html#genome">Genome</a>
+            <a href="index.html#in-out">In & Out</a>
+            <a href="about.html" class="active">About Us</a>
+            <a href="services.html#consult">Consult</a>
+            <a href="services.html#contract">Contract</a>
+            <a href="index.html#gallery">Gallery</a>
+            <a href="index.html#showroom">Showroom</a>
+            <a href="index.html#consult">Blog</a>
+            <a href="index.html#gallery">Shop</a>
+        </div>
+    </nav>
+
+    <!-- 1. About Hero Section -->
+    <section class="about-hero">
+        <div class="about-hero-content">
+            <p>Our Philosophy</p>
+            <h1>The Art of Space</h1>
+        </div>
+    </section>
+
+    <!-- 2. Brand Identity Overview -->
+    <section class="brand-overview">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: 60px;">
+            <h2 style="font-size: 2.2rem; color: var(--dark); font-style: italic; text-transform: none; margin-bottom: 20px;">
+                "Design is not what we do. It is the language through which we understand the world."
+            </h2>
+            <p style="font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--gray-text); line-height: 1.8;">
+                Creatomy was born from a desire to merge absolute structural integrity with raw artistic poetry. We design and manufacture bespoke furniture, spatial elements, and custom architectural solutions for projects that demand precision, craftsmanship, and a highly refined editorial perspective.
+            </p>
+        </div>
+
+        <div class="overview-grid">
+            <div class="overview-col">
+                <h2>Our Offerings</h2>
+                
+                <div class="overview-list-item">
+                    <h3>Escape</h3>
+                    <p>Luxury crafted indoor furniture that defines living spaces, focusing on fluid silhouettes and warm materiality.</p>
+                </div>
+                
+                <div class="overview-list-item">
+                    <h3>Genome</h3>
+                    <p>High-end architectural wardrobes and kitchen systems, balancing state-of-the-art storage hardware with luxury wooden finishes.</p>
+                </div>
+
+                <div class="overview-list-item">
+                    <h3>Global Origins</h3>
+                    <p>A meticulous curation of the finest global designs, imported materials, and international design elements.</p>
+                </div>
+
+                <div class="overview-list-item">
+                    <h3>Carbine</h3>
+                    <p>Sleek, bold, and structured metal-meets-wood furniture designs, conveying strength and geometric beauty.</p>
+                </div>
+            </div>
+
+            <div class="overview-col">
+                <h2>Our Services</h2>
+                
+                <div class="overview-list-item">
+                    <h3>Shop</h3>
+                    <p>Access our signature catalog collections of chairs, tables, and accents built to elevate luxury residences.</p>
+                </div>
+                
+                <div class="overview-list-item">
+                    <h3>Contract</h3>
+                    <p>Full-scale, turnkey project execution and customized furniture supply for high-end residential and commercial projects globally.</p>
+                </div>
+
+                <div class="overview-list-item">
+                    <h3>Consult</h3>
+                    <p>Personalized home styling, layout planning, and interior coordination service led by our design specialists.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Showroom & Workshop Video -->
+    <section class="showroom-video-section">
+        <video id="showroomVideo" autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-carpenter-sanding-a-piece-of-wood-40436-large.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content" style="pointer-events: none;">
+            <p style="letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem; font-family: 'Inter', sans-serif;">Inside our Creative Workshop</p>
+            <h2 style="font-size: 3rem; margin-top: 10px;">Where Concept Meets Craft</h2>
+        </div>
+        <button id="pause-btn">PAUSE</button>
+    </section>
+
+    <!-- 4. Services Explained in Detail -->
+    <section class="services-detail">
+        <div class="services-header">
+            <h2>Three Pillars of Service</h2>
+            <p>How we bring your spatial visions to life</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <h3>Shop</h3>
+                <p>
+                    Browse and acquire from our curated catalog collections. Every single piece of furniture is custom-crafted to order in our state-of-the-art facility, ensuring the highest standards of structural stability, precise wood joints, and luxurious upholstery fabric choice.
+                </p>
+                <a href="index.html#gallery" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-top: 15px; font-weight: bold;">View Catalog →</a>
+            </div>
+            
+            <div class="service-card">
+                <i class="fa-solid fa-briefcase"></i>
+                <h3>Contract</h3>
+                <p>
+                    For developers, hoteliers, and architects who demand excellence. We offer end-to-end turnkey project execution, custom millwork, structural wood fabrication, and bulk interior installations. Our team delivers absolute schedule discipline and luxury finishing on a global scale.
+                </p>
+                <a href="services.html#contract" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-top: 15px; font-weight: bold;">Explore Contract Projects →</a>
+            </div>
+
+            <div class="service-card">
+                <i class="fa-solid fa-compass"></i>
+                <h3>Consult</h3>
+                <p>
+                    Transform your space with expert curation. Our project styling consulting service matches you with a dedicated interior designer to curate layouts, color stories, material selections, and specific furniture sizes, tailored perfectly to fit your home's architecture.
+                </p>
+                <a href="services.html#consult" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-top: 15px; font-weight: bold;">Book Consultation →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Founder Section -->
+    <section class="founder-bio">
+        <div class="founder-bio-img">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="Prateek - Founder of Creatomy">
+        </div>
+        <div class="founder-bio-content">
+            <h2>Prateek</h2>
+            <span class="founder-title">Founder & Principal Designer</span>
+            <p class="founder-text">
+                "We believe that furniture is not merely functional; it is a structural poetry that defines the emotional boundary of a space."
+            </p>
+            <p class="founder-details">
+                Prateek founded Creatomy with a singular vision: to bridge the gap between architectural precision and artisanal craftsmanship in India. With a background deeply rooted in design engineering and material science, Prateek oversees the conceptual direction of our collections, ensuring every table joint, wardrobe rail, and fabric stitch meets international benchmarks of luxury.
+            </p>
+        </div>
+    </section>
+
+    <!-- 6. Production Facility Section -->
+    <section class="production-facility">
+        <div class="production-content">
+            <h2>The Production Facility</h2>
+            <p>
+                Our manufacturing and design facility is located in Bangalore, India, and spans over 50,000 square feet of state-of-the-art machinery integrated with traditional hand-craftsmanship workshops.
+            </p>
+            <p>
+                Equipped with high-precision 5-axis German CNC machines, advanced timber seasoning kilns, and clean-room polishing cabins, we control every single phase of production. This complete vertical integration allows us to build complex, bespoke architectural wardrobes, high-end veneer surfaces, and heavy solid wood joinery with micro-millimeter precision.
+            </p>
+            <p>
+                We source our raw wood (including European White Oak, American Walnut, and reclaimed Teak) from certified sustainable forests globally, pairing them with premium Italian structural hardware and performance fabrics.
+            </p>
+        </div>
+        <div class="production-img">
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="Creatomy Manufacturing Facility">
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span class="footer-logo">CREATOMY</span>
+        <div style="margin-bottom: 30px;">
+            <a href="#" style="color: white; margin: 0 10px; text-decoration: none;">Instagram</a>
+            <a href="#" style="color: white; margin: 0 10px; text-decoration: none;">Pinterest</a>
+            <a href="#" style="color: white; margin: 0 10px; text-decoration: none;">LinkedIn</a>
+        </div>
+        <p class="footer-copy">© 2026 CREATOMY DESIGN STUDIO. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/#" class="wa-float">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Hero text reveal animation on load
+        window.addEventListener('DOMContentLoaded', () => {
+            gsap.to('.about-hero h1', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: 'power4.out',
+                delay: 0.3
+            });
+            gsap.to('.about-hero p', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: 'power4.out',
+                delay: 0.6
+            });
+        });
+
+        // Initialize ScrollTrigger animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Grid sections reveal animation
+        gsap.from('.overview-col', {
+            scrollTrigger: {
+                trigger: '.brand-overview',
+                start: 'top 80%',
+                toggleActions: 'play none none none'
+            },
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            stagger: 0.3,
+            ease: 'power2.out'
+        });
+
+        // Services cards reveal animation
+        gsap.from('.service-card', {
+            scrollTrigger: {
+                trigger: '.services-detail',
+                start: 'top 80%',
+                toggleActions: 'play none none none'
+            },
+            opacity: 0,
+            y: 60,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power3.out'
+        });
+
+        // Founder Image Parallax
+        gsap.from('.founder-bio-img img', {
+            scrollTrigger: {
+                trigger: '.founder-bio',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+            },
+            yPercent: -15,
+            ease: 'none'
+        });
+
+        // Founder Content Reveal
+        gsap.from('.founder-bio-content', {
+            scrollTrigger: {
+                trigger: '.founder-bio',
+                start: 'top 75%',
+                toggleActions: 'play none none none'
+            },
+            opacity: 0,
+            x: 50,
+            duration: 1.2,
+            ease: 'power2.out'
+        });
+
+        // Production Facility Content Reveal
+        gsap.from('.production-content', {
+            scrollTrigger: {
+                trigger: '.production-facility',
+                start: 'top 75%',
+                toggleActions: 'play none none none'
+            },
+            opacity: 0,
+            y: 40,
+            duration: 1,
+            ease: 'power2.out'
+        });
+
+        // Workshop Video Controls
+        const video = document.getElementById('showroomVideo');
+        const btn = document.getElementById('pause-btn');
+
+        btn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                btn.innerHTML = "PAUSE";
+            } else {
+                video.pause();
+                btn.innerHTML = "PLAY";
+            }
+        });
+    </script>
+</body>
+</html>
