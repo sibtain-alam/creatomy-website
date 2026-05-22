@@ -39,7 +39,26 @@
             <a href="#consult">Blog</a>
             <a href="#gallery">Shop</a>
         </div>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
     </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay">
+        <a href="#hero">New</a>
+        <a href="#living">Living</a>
+        <a href="#little-wishes">Little Wishes</a>
+        <a href="#genome">Genome</a>
+        <a href="#in-out">In & Out</a>
+        <a href="about.html">About Us</a>
+        <a href="services.html#consult">Consult</a>
+        <a href="services.html#contract">Contract</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#showroom">Showroom</a>
+        <a href="#consult">Blog</a>
+        <a href="#gallery">Shop</a>
+    </div>
 
     <!-- 1. Full Screen Hero -->
     <section class="hero" id="hero">
@@ -178,14 +197,16 @@
             mobileImg.id = 'mobile-chair';
             Object.assign(mobileImg.style, {
                 position: 'fixed',
-                top: '55%',
+                top: '60%',
                 right: '5%',
                 transform: 'translateY(-50%)',
-                width: '320px',
+                width: '180px',
+                maxWidth: '45vw',
                 zIndex: '50',
                 pointerEvents: 'none',
                 transition: 'opacity 0.5s',
-                mixBlendMode: 'multiply'
+                mixBlendMode: 'multiply',
+                opacity: '0.9'
             });
             document.body.appendChild(mobileImg);
 
@@ -201,11 +222,23 @@
                 }
             });
             
+            // Fade opacity to subtle watermark when scrolling past hero
+            gsap.to(mobileImg, {
+                opacity: 0.15,
+                scrollTrigger: {
+                    trigger: ".brand-intro",
+                    start: "top center",
+                    end: "top 20%",
+                    scrub: true
+                }
+            });
+            
+            // Hide completely at the newsletter/footer
             ScrollTrigger.create({
                 trigger: ".newsletter",
                 start: "top center",
-                onEnter: () => mobileImg.style.opacity = '0',
-                onLeaveBack: () => mobileImg.style.opacity = '1'
+                onEnter: () => gsap.to(mobileImg, {opacity: 0, duration: 0.3}),
+                onLeaveBack: () => gsap.to(mobileImg, {opacity: 0.15, duration: 0.3})
             });
 
         } else {
@@ -726,6 +759,38 @@
                     link.classList.remove('active');
                     if (href === `#${current}`) {
                         link.classList.add('active');
+                    }
+                }
+            });
+        });
+
+        // Mobile Navigation Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const overlayLinks = mobileOverlay.querySelectorAll('a');
+
+        menuToggle.addEventListener('click', () => {
+            mobileOverlay.classList.toggle('active');
+            const isOpen = mobileOverlay.classList.contains('active');
+            menuToggle.querySelector('i').className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        });
+
+        overlayLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                mobileOverlay.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+                
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - 90;
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
                     }
                 }
             });

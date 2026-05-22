@@ -36,7 +36,26 @@
             <a href="index.html#consult">Blog</a>
             <a href="index.html#gallery">Shop</a>
         </div>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
     </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay">
+        <a href="index.html#hero">New</a>
+        <a href="index.html#living">Living</a>
+        <a href="index.html#little-wishes">Little Wishes</a>
+        <a href="index.html#genome">Genome</a>
+        <a href="index.html#in-out">In & Out</a>
+        <a href="about.html" class="active">About Us</a>
+        <a href="services.html#consult">Consult</a>
+        <a href="services.html#contract">Contract</a>
+        <a href="index.html#gallery">Gallery</a>
+        <a href="index.html#showroom">Showroom</a>
+        <a href="index.html#consult">Blog</a>
+        <a href="index.html#gallery">Shop</a>
+    </div>
 
     <!-- 1. About Hero Section -->
     <section class="about-hero">
@@ -305,6 +324,24 @@
                 video.pause();
                 btn.innerHTML = "PLAY";
             }
+        });
+
+        // Mobile Navigation Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const overlayLinks = mobileOverlay.querySelectorAll('a');
+
+        menuToggle.addEventListener('click', () => {
+            mobileOverlay.classList.toggle('active');
+            const isOpen = mobileOverlay.classList.contains('active');
+            menuToggle.querySelector('i').className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        });
+
+        overlayLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileOverlay.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+            });
         });
     </script>
 </body>
