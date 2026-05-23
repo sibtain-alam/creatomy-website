@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tekton Coffee Table | Creatomy Duro Collection</title>
+    
+    <!-- Google Fonts: Cormorant Garamond & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Link Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Preloader Screen -->
+    <div id="preloader">
+        <div class="preloader-logo">CREATOMY</div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header>
+        <a href="index.html" class="logo">CREATOMY</a>
+        <nav class="nav-links">
+            <a href="index.html#hero">New</a>
+            <a href="index.html#living">Living</a>
+            <a href="index.html#little-wishes">Little Wishes</a>
+            <a href="genome.html">Genome</a>
+            <a href="index.html#in-out">In & Out</a>
+            <a href="about.html">About Us</a>
+            <a href="about.html#services">Services</a>
+            <a href="about.html#showroom">Showroom</a>
+        </nav>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay">
+        <a href="index.html#hero">New</a>
+        <a href="index.html#living">Living</a>
+        <a href="index.html#little-wishes">Little Wishes</a>
+        <a href="genome.html">Genome</a>
+        <a href="index.html#in-out">In & Out</a>
+        <a href="about.html">About Us</a>
+        <a href="about.html#services">Services</a>
+        <a href="about.html#showroom">Showroom</a>
+    </div>
+
+    <!-- Split Page Layout -->
+    <main class="product-detail-section">
+        
+        <!-- Left Column: Product Scrolling Gallery -->
+        <section class="product-gallery">
+            <div class="gallery-img-container">
+                <img id="mainGalleryImg" src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1000&q=80" alt="Tekton Coffee Table Walnut Finish Primary View">
+            </div>
+            <div class="gallery-img-container">
+                <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1000&q=80" alt="Tekton Coffee Table living room mockup style">
+            </div>
+            <div class="gallery-img-container">
+                <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1000&q=80" alt="Tekton Coffee Table detailed structure zoom">
+            </div>
+        </section>
+
+        <!-- Right Column: Sticky Product Info Panel -->
+        <section class="product-info-panel">
+            <span class="prod-meta">DURO COLLECTION</span>
+            <h1 class="prod-title">Tekton Coffee Table</h1>
+            <span class="prod-price">₹85,000</span>
+            
+            <p class="prod-description">
+                A sculptural centerpiece demonstrating absolute geometric balance. The Tekton Coffee Table pairs a thick, radiused timber top with slender metal supports, marrying structural strength with visual lightness.
+            </p>
+            
+            <!-- Finish Swatches Selector -->
+            <div class="finish-selector-wrapper">
+                <span class="selector-label">Select Finish</span>
+                <div class="swatch-group">
+                    <div class="swatch wood active" data-finish="American Walnut" onclick="selectFinish(this)"></div>
+                    <div class="swatch white" data-finish="Matte White Lacquer" onclick="selectFinish(this)"></div>
+                    <div class="swatch wicker" data-finish="Natural Rattan Wicker" onclick="selectFinish(this)"></div>
+                </div>
+                <span class="swatch-info" id="selectedFinishLabel">Finish: American Walnut</span>
+            </div>
+
+            <!-- Specifications Table -->
+            <table class="spec-table">
+                <tr>
+                    <td class="label">Dimensions</td>
+                    <td class="value">1200mm W x 1200mm D x 380mm H</td>
+                </tr>
+                <tr>
+                    <td class="label">Structure</td>
+                    <td class="value">Solid Ash timber base, brushed steel core</td>
+                </tr>
+                <tr>
+                    <td class="label">Top finishes</td>
+                    <td class="value" id="specFinish">Premium Oak veneer, lacquer coat</td>
+                </tr>
+                <tr>
+                    <td class="label">Lead Time</td>
+                    <td class="value">6 - 8 Weeks (Bespoke execution)</td>
+                </tr>
+            </table>
+
+            <!-- Enquiry Action Button -->
+            <button class="enquiry-btn" id="openEnquiry">Request Bespoke Quote</button>
+        </section>
+
+    </main>
+
+    <!-- Slide-Out Enquiry Sidebar -->
+    <div class="enquiry-sidebar" id="enquirySidebar">
+        <div class="sidebar-close" id="closeEnquiry">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <div class="sidebar-hdr">
+            <h3>Request Quote</h3>
+            <p>Fill out the parameters for custom turnkey production pricing.</p>
+        </div>
+        
+        <form class="enquiry-form" id="enquiryForm" onsubmit="handleEnquirySubmit(event)">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="john@example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Selected Finish</label>
+                <select id="formFinishSelect">
+                    <option value="American Walnut">American Walnut Veneer</option>
+                    <option value="Matte White Lacquer">Matte White Lacquer</option>
+                    <option value="Natural Rattan Wicker">Natural Rattan Wicker</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea rows="4" placeholder="Mention custom size or styling preferences..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Enquiry →</button>
+        </form>
+
+        <div class="form-success-msg" id="successMsg" style="display: none;">
+            <i class="fa-regular fa-circle-check"></i>
+            <h4>Enquiry Sent</h4>
+            <p>Thank you. A Creatomy design consultant will contact you with material specs and quotes within 24 hours.</p>
+        </div>
+    </div>
+
+    <!-- Related Products ("You may also like") -->
+    <section class="related-products">
+        <div class="section-hdr">
+            <h3>You may also like</h3>
+            <span>Related furniture pieces</span>
+        </div>
+        <div class="related-grid">
+            <div class="product-card" onclick="window.location.href='product-detail.html'">
+                <div class="product-card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=500&q=80" alt="Velvet Accent Chair">
+                </div>
+                <div class="product-info">
+                    <h4>Velvet Accent Chair</h4>
+                    <p>Living / ₹1,02,000</p>
+                </div>
+            </div>
+            <div class="product-card" onclick="window.location.href='product-detail.html'">
+                <div class="product-card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1540638349517-3abd5afc5847?auto=format&fit=crop&w=500&q=80" alt="Ceramic Vase">
+                </div>
+                <div class="product-info">
+                    <h4>Ceramic Wish Vase</h4>
+                    <p>Decor / ₹12,000</p>
+                </div>
+            </div>
+            <div class="product-card" onclick="window.location.href='product-detail.html'">
+                <div class="product-card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=500&q=80" alt="Cloud Sectional Sofa">
+                </div>
+                <div class="product-info">
+                    <h4>Cloud Sectional Sofa</h4>
+                    <p>In & Out / ₹4,20,000</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span class="footer-logo">CREATOMY</span>
+        <div class="footer-links">
+            <a href="index.html#hero">New</a>
+            <a href="index.html#living">Living</a>
+            <a href="index.html#little-wishes">Little Wishes</a>
+            <a href="genome.html">Genome</a>
+            <a href="about.html">About Us</a>
+            <a href="about.html#services">Services</a>
+            <a href="https://wa.me/91XXXXXXXXXX" target="_blank">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 CREATOMY DESIGN STUDIO. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/91XXXXXXXXXX" class="wa-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        // Preloader timeout
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+            }, 1000); // Shorter preloader on subpages
+        });
+
+        // Hide/show sticky header on scroll
+        let lastScrollY = window.scrollY;
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > lastScrollY && window.scrollY > 150) {
+                header.classList.add('hide');
+            } else {
+                header.classList.remove('hide');
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        menuToggle.addEventListener('click', () => {
+            mobileOverlay.classList.toggle('active');
+            const isOpen = mobileOverlay.classList.contains('active');
+            menuToggle.querySelector('i').className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        });
+
+        // Close mobile overlay
+        mobileOverlay.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileOverlay.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+            });
+        });
+
+        // Swatch Finish selection
+        function selectFinish(swatchEl) {
+            document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+            swatchEl.classList.add('active');
+            
+            const finishName = swatchEl.getAttribute('data-finish');
+            document.getElementById('selectedFinishLabel').innerText = `Finish: ${finishName}`;
+            document.getElementById('specFinish').innerText = `${finishName} veneer, raw texture coating`;
+            
+            // Sync with sidebar form
+            document.getElementById('formFinishSelect').value = finishName;
+
+            // Dynamically change gallery image based on selection to wow client
+            const mainImg = document.getElementById('mainGalleryImg');
+            if (finishName === "Matte White Lacquer") {
+                mainImg.src = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80";
+            } else if (finishName === "Natural Rattan Wicker") {
+                mainImg.src = "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1000&q=80";
+            } else {
+                mainImg.src = "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=1000&q=80";
+            }
+        }
+
+        // Sidebar Quote Modal Slide-out
+        const openBtn = document.getElementById('openEnquiry');
+        const closeBtn = document.getElementById('closeEnquiry');
+        const sidebar = document.getElementById('enquirySidebar');
+
+        openBtn.addEventListener('click', () => sidebar.classList.add('active'));
+        closeBtn.addEventListener('click', () => sidebar.classList.remove('active'));
+
+        // Handle enquiry submission
+        function handleEnquirySubmit(e) {
+            e.preventDefault();
+            document.getElementById('enquiryForm').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genome Modular Systems | Creatomy</title>
+    
+    <!-- Google Fonts: Cormorant Garamond & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Link Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Preloader Screen -->
+    <div id="preloader">
+        <div class="preloader-logo">CREATOMY</div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header>
+        <a href="index.html" class="logo">CREATOMY</a>
+        <nav class="nav-links">
+            <a href="index.html#hero">New</a>
+            <a href="index.html#living">Living</a>
+            <a href="index.html#little-wishes">Little Wishes</a>
+            <a href="genome.html" class="active">Genome</a>
+            <a href="index.html#in-out">In & Out</a>
+            <a href="about.html">About Us</a>
+            <a href="about.html#services">Services</a>
+            <a href="about.html#showroom">Showroom</a>
+        </nav>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay">
+        <a href="index.html#hero">New</a>
+        <a href="index.html#living">Living</a>
+        <a href="index.html#little-wishes">Little Wishes</a>
+        <a href="genome.html">Genome</a>
+        <a href="index.html#in-out">In & Out</a>
+        <a href="about.html">About Us</a>
+        <a href="about.html#services">Services</a>
+        <a href="about.html#showroom">Showroom</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="genome-hero">
+        <div class="genome-hero-overlay"></div>
+        <div class="genome-hero-content">
+            <h1>Genome</h1>
+            <p>Architectural modularity for kitchens, walk-in closets, and wall systems.</p>
+        </div>
+    </section>
+
+    <!-- Intro section detailing Rimadesio philosophy -->
+    <section class="genome-intro-section">
+        <h2>Spatially Integrated Systems</h2>
+        <p>
+            The Genome collection redefines interior partitioning. Moving beyond standard partition walls and cupboards, it is a fully integrated system of walk-in wardrobes, double-sided glass dividers, and handle-less kitchen systems designed to weave structural technology, transparency, and raw craftsmanship into the fabric of a home.
+        </p>
+    </section>
+
+    <!-- Showcase Grid with interactive blueprint hover states -->
+    <section class="systems-showcase">
+        <div class="systems-grid">
+            
+            <!-- System 1 -->
+            <div class="system-card">
+                <div class="system-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="Sliding Glass Wardrobe Genome system">
+                    <!-- SVG Blueprint Wireframe -->
+                    <div class="system-blueprint">
+                        <svg viewBox="0 0 100 100">
+                            <!-- Draw shelves/hangers -->
+                            <rect x="5" y="5" width="90" height="90" />
+                            <line x1="35" y1="5" x2="35" y2="95" />
+                            <line x1="65" y1="5" x2="65" y2="95" />
+                            <line x1="5" y1="20" x2="95" y2="20" />
+                            <line x1="5" y1="40" x2="35" y2="40" />
+                            <line x1="5" y1="50" x2="35" y2="50" />
+                            <line x1="65" y1="35" x2="95" y2="35" />
+                            <line x1="65" y1="75" x2="95" y2="75" />
+                            <circle cx="50" cy="30" r="4" />
+                            <circle cx="50" cy="50" r="4" />
+                        </svg>
+                    </div>
+                </div>
+                <h3>Backlit Sliding Closet</h3>
+                <p>Floor-to-ceiling glass systems with aluminum extrusions and integrated micro-LED framing.</p>
+                <ul>
+                    <li>Smoked Glass</li>
+                    <li>Anodized Metal</li>
+                    <li>Bespoke Width</li>
+                </ul>
+            </div>
+
+            <!-- System 2 -->
+            <div class="system-card">
+                <div class="system-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Kitchen Island Cabinet system">
+                    <div class="system-blueprint">
+                        <svg viewBox="0 0 100 100">
+                            <rect x="10" y="25" width="80" height="60" />
+                            <line x1="10" y1="45" x2="90" y2="45" />
+                            <line x1="10" y1="65" x2="90" y2="65" />
+                            <line x1="50" y1="25" x2="50" y2="85" />
+                            <rect x="25" y="10" width="50" height="10" />
+                        </svg>
+                    </div>
+                </div>
+                <h3>Genome Chef Island</h3>
+                <p>Architectural kitchen installations featuring handle-less stone countertops and hidden drawer storage.</p>
+                <ul>
+                    <li>Granite Top</li>
+                    <li>Oak Interior</li>
+                    <li>Integrated Induction</li>
+                </ul>
+            </div>
+
+            <!-- System 3 -->
+            <div class="system-card">
+                <div class="system-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80" alt="Walk In Closet Partition system">
+                    <div class="system-blueprint">
+                        <svg viewBox="0 0 100 100">
+                            <rect x="5" y="5" width="90" height="90" />
+                            <line x1="5" y1="15" x2="95" y2="15" />
+                            <line x1="20" y1="15" x2="20" y2="95" />
+                            <line x1="80" y1="15" x2="80" y2="95" />
+                            <line x1="20" y1="35" x2="80" y2="35" />
+                            <line x1="20" y1="65" x2="80" y2="65" />
+                        </svg>
+                    </div>
+                </div>
+                <h3>Modular Wardrobe System</h3>
+                <p>Luxury open-shelf wardrobe modules with custom leather-wrapped organizing dividers.</p>
+                <ul>
+                    <li>Saddle Leather</li>
+                    <li>Ash Veneer</li>
+                    <li>Integrated Mirrors</li>
+                </ul>
+            </div>
+
+            <!-- System 4 -->
+            <div class="system-card">
+                <div class="system-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80" alt="Sliding glass doors partitioning">
+                    <div class="system-blueprint">
+                        <svg viewBox="0 0 100 100">
+                            <rect x="5" y="5" width="40" height="90" />
+                            <rect x="55" y="5" width="40" height="90" />
+                            <line x1="25" y1="5" x2="25" y2="95" stroke-dasharray="2,2"/>
+                            <line x1="75" y1="5" x2="75" y2="95" stroke-dasharray="2,2"/>
+                        </svg>
+                    </div>
+                </div>
+                <h3>Acoustic Glass Partitions</h3>
+                <p>Structural divider panels with double-glazed glass, steel frameworks, and floor-recessed rails.</p>
+                <ul>
+                    <li>Sound Insulated</li>
+                    <li>Magnetic Lock</li>
+                    <li>Satin Metal</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Customizer Preview tabs -->
+    <section class="customizer-preview">
+        <div class="customizer-hdr">
+            <h2>Preview Layouts</h2>
+            <p>Select a layout module to see technical proportions and finished specs.</p>
+        </div>
+
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-wardrobe')">Wardrobe L-Shape</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-kitchen')">Kitchen Island</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-walkin')">Walk-In Closet</button>
+        </div>
+
+        <!-- Tab 1 -->
+        <div class="tab-pane active" id="tab-wardrobe">
+            <div class="tab-img-container">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="L-shape Wardrobe modular look">
+            </div>
+            <div class="tab-info">
+                <h3>The L-Shape Corner Solution</h3>
+                <p>
+                    A layout engineered to maximize walk-in dressing areas. Features custom 90-degree corner shelving columns with continuous light strips, sliding drawer cabinets, and glass dividers.
+                </p>
+                <table class="spec-table">
+                    <tr>
+                        <td class="label">Corner Width</td>
+                        <td class="value">Custom up to 3200mm</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Structure finish</td>
+                        <td class="value">Ebonized Oak, Bronze extrusions</td>
+                    </tr>
+                </table>
+                <a href="https://wa.me/91XXXXXXXXXX" class="enquiry-btn" target="_blank" style="display: block; margin-top: 30px;">Inquire on WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- Tab 2 -->
+        <div class="tab-pane" id="tab-kitchen">
+            <div class="tab-img-container">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Kitchen modular solution">
+            </div>
+            <div class="tab-info">
+                <h3>Linear Kitchen Island</h3>
+                <p>
+                    The heart of modern living. Features a modular island with matching integrated cooktops, flush storage cabinet panels, and cantilevered breakfast bar seating extensions.
+                </p>
+                <table class="spec-table">
+                    <tr>
+                        <td class="label">Slab Thickness</td>
+                        <td class="value">40mm Solid Terrazzo / Granite</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Drawer slides</td>
+                        <td class="value">Soft-close concealed runner hardware</td>
+                    </tr>
+                </table>
+                <a href="https://wa.me/91XXXXXXXXXX" class="enquiry-btn" target="_blank" style="display: block; margin-top: 30px;">Inquire on WhatsApp</a>
+            </div>
+        </div>
+
+        <!-- Tab 3 -->
+        <div class="tab-pane" id="tab-walkin">
+            <div class="tab-img-container">
+                <img src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80" alt="Walk-in modular styling">
+            </div>
+            <div class="tab-info">
+                <h3>Walk-In Dressing Suite</h3>
+                <p>
+                    A fully customized luxury wardrobe environment. Smoked glass partitions divide the dressing area from the bedroom, showcasing backlit cabinetry, leather drawer linings, and metal jewelry organizers.
+                </p>
+                <table class="spec-table">
+                    <tr>
+                        <td class="label">Cabinet Depth</td>
+                        <td class="value">600mm / 650mm custom</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Drawer Lining</td>
+                        <td class="value">Camel Alcantara / Italian Leather</td>
+                    </tr>
+                </table>
+                <a href="https://wa.me/91XXXXXXXXXX" class="enquiry-btn" target="_blank" style="display: block; margin-top: 30px;">Inquire on WhatsApp</a>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span class="footer-logo">CREATOMY</span>
+        <div class="footer-links">
+            <a href="index.html#hero">New</a>
+            <a href="index.html#living">Living</a>
+            <a href="index.html#little-wishes">Little Wishes</a>
+            <a href="genome.html">Genome</a>
+            <a href="about.html">About Us</a>
+            <a href="about.html#services">Services</a>
+            <a href="https://wa.me/91XXXXXXXXXX" target="_blank">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 CREATOMY DESIGN STUDIO. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/91XXXXXXXXXX" class="wa-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        // Preloader timeout
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+            }, 1000);
+        });
+
+        // Hide/show sticky header on scroll
+        let lastScrollY = window.scrollY;
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > lastScrollY && window.scrollY > 150) {
+                header.classList.add('hide');
+            } else {
+                header.classList.remove('hide');
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        menuToggle.addEventListener('click', () => {
+            mobileOverlay.classList.toggle('active');
+            const isOpen = mobileOverlay.classList.contains('active');
+            menuToggle.querySelector('i').className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        });
+
+        // Close mobile overlay
+        mobileOverlay.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileOverlay.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+            });
+        });
+
+        // Tab Switcher
+        function switchTab(e, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+            e.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

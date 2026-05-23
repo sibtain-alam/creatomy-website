@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creatomy | Luxury Furniture & Intentional Spaces</title>
+    
+    <!-- Google Fonts: Cormorant Garamond & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Three.js and GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Link Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. Preloader Screen -->
+    <div id="preloader">
+        <div class="preloader-logo">CREATOMY</div>
+    </div>
+
+    <!-- 3D WebGL Canvas for interactive desktop chair -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Navigation Header -->
+    <header>
+        <a href="index.html" class="logo">CREATOMY</a>
+        <nav class="nav-links">
+            <a href="index.html#hero" class="active">New</a>
+            <a href="index.html#living">Living</a>
+            <a href="index.html#little-wishes">Little Wishes</a>
+            <a href="genome.html">Genome</a>
+            <a href="index.html#in-out">In & Out</a>
+            <a href="about.html">About Us</a>
+            <a href="about.html#services">Services</a>
+            <a href="about.html#showroom">Showroom</a>
+        </nav>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay">
+        <a href="index.html#hero">New</a>
+        <a href="index.html#living">Living</a>
+        <a href="index.html#little-wishes">Little Wishes</a>
+        <a href="genome.html">Genome</a>
+        <a href="index.html#in-out">In & Out</a>
+        <a href="about.html">About Us</a>
+        <a href="about.html#services">Services</a>
+        <a href="about.html#showroom">Showroom</a>
+    </div>
+
+    <!-- Main Content Container -->
+
+    <!-- Section 1: Hero -->
+    <section class="hero" id="hero">
+        <video id="heroVideo" autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-top-view-of-a-luxurious-and-modern-living-room-44331-large.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Intentional Spaces</h1>
+            <p>Design that breathes life</p>
+        </div>
+        <button id="pause-btn">PAUSE</button>
+    </section>
+
+    <!-- Section 2: Brand Philosophy & Intro -->
+    <section class="brand-intro" id="about">
+        <div class="intro-brand-subtitle">THE ESSENCE</div>
+        <div class="intro-text">
+            <p>"We believe furniture is the silent poetry of a room. Our pieces are crafted not just to occupy space, but to define it."</p>
+            <a href="about.html">Discover Our Story</a>
+        </div>
+        <div class="founder-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Founder Portrait" class="founder-img">
+        </div>
+    </section>
+
+    <!-- Section 3: Editorial Category Grid (2x2 Asymmetric) -->
+    <section class="category-grid">
+        <div class="cat-item" id="living" onclick="window.location.href='product-detail.html'">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80" alt="Living category collection">
+            <div class="cat-overlay">
+                <h2>Living</h2>
+                <p>Explore collection →</p>
+            </div>
+        </div>
+        <div class="cat-item" id="little-wishes" onclick="window.location.href='product-detail.html'">
+            <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=800&q=80" alt="Art objects Little Wishes">
+            <div class="cat-overlay">
+                <h2>Little Wishes</h2>
+                <p>Explore objects →</p>
+            </div>
+        </div>
+        <div class="cat-item" id="genome" onclick="window.location.href='genome.html'">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Genome Kitchen systems">
+            <div class="cat-overlay">
+                <h2>Genome</h2>
+                <p>Modular systems →</p>
+            </div>
+        </div>
+        <div class="cat-item" id="in-out" onclick="window.location.href='product-detail.html'">
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80" alt="Outdoor furniture in-out">
+            <div class="cat-overlay">
+                <h2>In & Out</h2>
+                <p>Explore outdoor →</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Best Sellers Horizontal Gallery -->
+    <section class="best-sellers" id="gallery">
+        <div class="section-hdr">
+            <h3>The Edit</h3>
+            <span>Selected Best Sellers</span>
+        </div>
+        <div class="scroll-container">
+            <div class="product-card" onclick="window.location.href='product-detail.html'">
+                <div class="product-card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=500&q=80" alt="Velvet Accent Chair">
+                </div>
+                <div class="product-info">
+                    <h4>Velvet Accent Chair</h4>
+                    <p>Living / ₹1,02,000</p>
+                </div>
+            </div>
+            <div class="product-card" onclick="window.location.href='product-detail.html'">
+                <div class="product-card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&w=500&q=80" alt="Tekton Coffee Table">
+                </div>
+                <div class="product-info">
+                    <h4>Tekton Coffee Table</h4>
+                    <p>Duro Collection / ₹85,000</p>
+                </div>
+            </div>
+            <div class="product-card" onclick="window.location.href='product-detail.html'">
+                <div class="product-card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1540638349517-3abd5afc5847?auto=format&fit=crop&w=500&q=80" alt="Ceramic Object">
+                </div>
+                <div class="product-info">
+                    <h4>Ceramic Wish Vase</h4>
+                    <p>Decor / ₹12,000</p>
+                </div>
+            </div>
+            <div class="product-card" onclick="window.location.href='product-detail.html'">
+                <div class="product-card-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=500&q=80" alt="Modular Sectional Sofa">
+                </div>
+                <div class="product-info">
+                    <h4>Cloud Sectional Sofa</h4>
+                    <p>In & Out / ₹4,20,000</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Contract Services Banner Trigger -->
+    <section class="contract-banner">
+        <div class="contract-top">
+            <h2>Contract Services</h2>
+            <p>Inspiring architectural solutions for turnkey residential, hospitality, and workspace projects worldwide.</p>
+        </div>
+        <a href="about.html#services" class="see-more">EXPLORE OUR CAPABILITIES →</a>
+    </section>
+
+    <!-- Section 6: Showroom Location & Booking Trigger -->
+    <section class="map-section" id="showroom">
+        <div class="map-marker">
+            <i class="fa-solid fa-location-dot"></i>
+            <h3>Our Factory & Showroom</h3>
+            <p>Bangalore, India — Design Studio & Production Facility</p>
+            <a href="mailto:showroom@creatomy.com?subject=Showroom%20Visit%20Request">Book Private Tour</a>
+        </div>
+    </section>
+
+    <!-- Section 7: Newsletter Signup -->
+    <section class="newsletter">
+        <h2>Stay connected to thoughtful design</h2>
+        <p>For architects, collaborators, and clients who value detail, materiality, and intentional spaces.</p>
+        <form onsubmit="event.preventDefault(); alert('Access requested successfully.');">
+            <input type="email" placeholder="ENTER YOUR EMAIL ADDRESS" required>
+            <button type="submit">Request Access →</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span class="footer-logo">CREATOMY</span>
+        <div class="footer-links">
+            <a href="index.html#hero">New</a>
+            <a href="index.html#living">Living</a>
+            <a href="index.html#little-wishes">Little Wishes</a>
+            <a href="genome.html">Genome</a>
+            <a href="about.html">About Us</a>
+            <a href="about.html#services">Services</a>
+            <a href="https://wa.me/91XXXXXXXXXX" target="_blank">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 CREATOMY DESIGN STUDIO. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/91XXXXXXXXXX" class="wa-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. Preloader Screen Timeout ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+            }, 2500); // Allow preloader animation to complete
+        });
+
+        // --- 2. Sticky Header Scroll-hide Animation ---
+        let lastScrollY = window.scrollY;
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > lastScrollY && window.scrollY > 150) {
+                header.classList.add('hide');
+            } else {
+                header.classList.remove('hide');
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        // --- 3. Mobile Hamburger Toggle overlay ---
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        menuToggle.addEventListener('click', () => {
+            mobileOverlay.classList.toggle('active');
+            const isOpen = mobileOverlay.classList.contains('active');
+            menuToggle.querySelector('i').className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        });
+
+        // Close mobile overlay on link click
+        mobileOverlay.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileOverlay.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fa-solid fa-bars';
+            });
+        });
+
+        // --- 4. 3D Scroll Experience (WebGL Desktop / Parallax PNG Mobile) ---
+        const isMobile = window.innerWidth <= 900;
+        const canvas = document.getElementById('webgl-canvas');
+
+        if (isMobile) {
+            // Mobile fallback: Disable canvas and create parallax image
+            canvas.style.display = 'none';
+
+            const mobileImg = document.createElement('img');
+            mobileImg.src = 'chair_render.png';
+            mobileImg.id = 'mobile-chair';
+            document.body.appendChild(mobileImg);
+
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.to(mobileImg, {
+                yPercent: 15,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "body",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: true
+                }
+            });
+
+            // Fade opacity to subtle watermark when scrolling past hero
+            gsap.to(mobileImg, {
+                opacity: 0.15,
+                scrollTrigger: {
+                    trigger: ".brand-intro",
+                    start: "top center",
+                    end: "top 20%",
+                    scrub: true
+                }
+            });
+
+            // Hide completely at the newsletter/footer
+            ScrollTrigger.create({
+                trigger: ".newsletter",
+                start: "top center",
+                onEnter: () => gsap.to(mobileImg, {opacity: 0, duration: 0.3}),
+                onLeaveBack: () => gsap.to(mobileImg, {opacity: 0.15, duration: 0.3})
+            });
+
+        } else {
+            // Desktop Three.js WebGL rendering loop
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, 0, 10);
+
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+            scene.add(ambientLight);
+
+            const spotLight = new THREE.SpotLight(0xfff0dd, 1.5);
+            spotLight.position.set(5, 8, 5);
+            spotLight.angle = Math.PI / 4;
+            spotLight.penumbra = 0.8;
+            scene.add(spotLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.35);
+            dirLight.position.set(-5, 3, -5);
+            scene.add(dirLight);
+
+            const chairGroup = new THREE.Group();
+            spotLight.target = chairGroup;
+
+            const texLoader = new THREE.TextureLoader();
+            texLoader.setCrossOrigin('anonymous');
+            
+            const matDefault = new THREE.MeshPhysicalMaterial({ 
+                color: 0x1a1a1a, 
+                roughness: 0.55, 
+                metalness: 0.15,
+                clearcoat: 0.1,
+                clearcoatRoughness: 0.1
+            });
+            
+            const matWood = new THREE.MeshPhysicalMaterial({ 
+                color: 0x5c4033, 
+                roughness: 0.35, 
+                metalness: 0.05,
+                clearcoat: 0.4,
+                clearcoatRoughness: 0.15
+            });
+            
+            texLoader.load(
+                'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=800&q=80',
+                (texture) => {
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    texture.repeat.set(1.5, 1.5);
+                    matWood.map = texture;
+                    matWood.needsUpdate = true;
+                }
+            );
+
+            const matWhite = new THREE.MeshPhysicalMaterial({ 
+                color: 0xeeeeee, 
+                roughness: 0.85, 
+                metalness: 0.0,
+                clearcoat: 0.0
+            });
+
+            const matWicker = new THREE.MeshPhysicalMaterial({ 
+                color: 0xc19a6b, 
+                roughness: 0.8,
+                metalness: 0.05
+            });
+
+            texLoader.load(
+                'https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?auto=format&fit=crop&w=800&q=80',
+                (texture) => {
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    texture.repeat.set(3, 3);
+                    matWicker.map = texture;
+                    matWicker.needsUpdate = true;
+                }
+            );
+
+            const matMetal = new THREE.MeshPhysicalMaterial({
+                color: 0x8d7e6d, 
+                metalness: 0.85,
+                roughness: 0.25,
+                clearcoat: 0.3
+            });
+
+            // Geometry Components
+            const seatGeom = new THREE.CylinderGeometry(1.2, 1.2, 0.3, 64);
+            const seat = new THREE.Mesh(seatGeom, matDefault);
+            seat.position.y = 0;
+            chairGroup.add(seat);
+
+            const backrestGeom = new THREE.TorusGeometry(1.1, 0.18, 32, 64, Math.PI);
+            const backrest = new THREE.Mesh(backrestGeom, matDefault);
+            backrest.rotation.x = Math.PI / 2;
+            backrest.rotation.z = -Math.PI / 2;
+            backrest.position.set(0, 0.65, 0);
+            chairGroup.add(backrest);
+
+            const framePlateGeom = new THREE.CylinderGeometry(0.9, 0.9, 0.05, 32);
+            const framePlate = new THREE.Mesh(framePlateGeom, matMetal);
+            framePlate.position.y = -0.16;
+            chairGroup.add(framePlate);
+
+            const rodGeom = new THREE.CylinderGeometry(0.035, 0.035, 0.5, 16);
+            const rodCenter = new THREE.Mesh(rodGeom, matMetal);
+            rodCenter.position.set(0, 0.35, -1.1);
+            
+            const rodLeft = new THREE.Mesh(rodGeom, matMetal);
+            rodLeft.position.set(-1.1 * Math.sin(Math.PI / 4), 0.35, -1.1 * Math.cos(Math.PI / 4));
+            
+            const rodRight = new THREE.Mesh(rodGeom, matMetal);
+            rodRight.position.set(1.1 * Math.sin(Math.PI / 4), 0.35, -1.1 * Math.cos(Math.PI / 4));
+
+            chairGroup.add(rodCenter, rodLeft, rodRight);
+
+            function createLeg(x, z, rotX, rotZ) {
+                const legPivot = new THREE.Group();
+                legPivot.position.set(x, -0.18, z);
+                const legGeom = new THREE.CylinderGeometry(0.045, 0.025, 1.1, 16);
+                const legMesh = new THREE.Mesh(legGeom, matMetal);
+                legMesh.position.y = -0.55;
+                legPivot.add(legMesh);
+                legPivot.rotation.x = rotX;
+                legPivot.rotation.z = rotZ;
+                return legPivot;
+            }
+
+            const legFL = createLeg(-0.75, 0.75, 0.22, 0.22);
+            const legFR = createLeg(0.75, 0.75, 0.22, -0.22);
+            const legBL = createLeg(-0.75, -0.75, -0.22, 0.22);
+            const legBR = createLeg(0.75, -0.75, -0.22, -0.22);
+
+            chairGroup.add(legFL, legFR, legBL, legBR);
+
+            const swappableMeshes = [seat, backrest];
+            function changeChairMaterial(newMat) {
+                swappableMeshes.forEach(mesh => {
+                    mesh.material = newMat;
+                });
+            }
+
+            scene.add(chairGroup);
+            chairGroup.position.set(3.5, -0.5, 0); 
+            chairGroup.rotation.y = -Math.PI / 4;
+
+            // Particles (Golden Dust)
+            const partGeom = new THREE.BufferGeometry();
+            const partCount = 150;
+            const posArray = new Float32Array(partCount * 3);
+            for(let i=0; i<partCount*3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 6;
+            }
+            partGeom.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const partMat = new THREE.PointsMaterial({
+                size: 0.06,
+                color: 0xd4af37,
+                transparent: true,
+                opacity: 0,
+                blending: THREE.AdditiveBlending
+            });
+            const particles = new THREE.Points(partGeom, partMat);
+            chairGroup.add(particles);
+
+            // Contact Shadow Plane
+            const shadowCanvas = document.createElement('canvas');
+            shadowCanvas.width = 256;
+            shadowCanvas.height = 256;
+            const shadowCtx = shadowCanvas.getContext('2d');
+            const gradient = shadowCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
+            gradient.addColorStop(0, 'rgba(0, 0, 0, 0.6)');
+            gradient.addColorStop(0.3, 'rgba(0, 0, 0, 0.4)');
+            gradient.addColorStop(0.8, 'rgba(0, 0, 0, 0.08)');
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            shadowCtx.fillStyle = gradient;
+            shadowCtx.fillRect(0, 0, 256, 256);
+            
+            const shadowTex = new THREE.CanvasTexture(shadowCanvas);
+            const shadowGeo = new THREE.PlaneGeometry(3.5, 3.5);
+            const shadowMat = new THREE.MeshBasicMaterial({
+                map: shadowTex,
+                transparent: true,
+                depthWrite: false
+            });
+            const shadowPlane = new THREE.Mesh(shadowGeo, shadowMat);
+            shadowPlane.rotation.x = -Math.PI / 2;
+            shadowPlane.position.y = -1.8;
+            scene.add(shadowPlane);
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            const scrollRotation = { x: 0, y: -Math.PI / 4, z: 0 };
+            let autoRotate = true;
+            let targetMouseX = 0, targetMouseY = 0;
+            let currentMouseX = 0, currentMouseY = 0;
+            let targetUserRotationY = 0, targetUserRotationX = 0;
+            let userRotationY = 0, userRotationX = 0;
+            let isDragging = false;
+            let previousMouseX = 0, previousMouseY = 0;
+
+            function isHoveringInteractive(e) {
+                if (!e.target) return false;
+                return e.target.closest('a') || e.target.closest('button') || e.target.closest('input');
+            }
+
+            window.addEventListener('mousedown', (e) => {
+                if (isHoveringInteractive(e)) return;
+                if (e.clientX > window.innerWidth * 0.5) {
+                    isDragging = true;
+                    previousMouseX = e.clientX;
+                    previousMouseY = e.clientY;
+                }
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                const hoveringInteractive = isHoveringInteractive(e);
+                if (hoveringInteractive) {
+                    document.body.style.cursor = 'default';
+                } else if (e.clientX > window.innerWidth * 0.5) {
+                    document.body.style.cursor = isDragging ? 'grabbing' : 'grab';
+                } else {
+                    document.body.style.cursor = 'default';
+                }
+
+                if (isDragging) {
+                    const deltaX = e.clientX - previousMouseX;
+                    const deltaY = e.clientY - previousMouseY;
+                    targetUserRotationY += deltaX * 0.015;
+                    targetUserRotationX += deltaY * 0.015;
+                    targetUserRotationX = Math.max(-0.5, Math.min(0.5, targetUserRotationX));
+                    previousMouseX = e.clientX;
+                    previousMouseY = e.clientY;
+                } else {
+                    targetMouseX = (e.clientX / window.innerWidth - 0.5) * 0.4;
+                    targetMouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                document.body.style.cursor = 'default';
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+                currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+                userRotationY += (targetUserRotationY - userRotationY) * 0.1;
+                userRotationX += (targetUserRotationX - userRotationX) * 0.1;
+
+                if (autoRotate && !isDragging) {
+                    scrollRotation.y += 0.005;
+                }
+
+                chairGroup.rotation.y = scrollRotation.y + userRotationY + (autoRotate ? currentMouseX : currentMouseX * 0.2);
+                chairGroup.rotation.x = scrollRotation.x + userRotationX + (autoRotate ? currentMouseY : currentMouseY * 0.2);
+                chairGroup.rotation.z = scrollRotation.z;
+
+                if(partMat.opacity > 0) {
+                    particles.rotation.y -= 0.002;
+                    particles.rotation.x += 0.001;
+                }
+
+                const chairY = chairGroup.position.y;
+                const dist = chairY - (-1.8);
+                const shadowScale = gsap.utils.mapRange(1.0, 2.0, 1.2, 0.8, dist);
+                const shadowOpacity = gsap.utils.mapRange(1.0, 2.0, 0.7, 0.3, dist);
+                shadowPlane.scale.set(shadowScale, shadowScale, 1);
+                shadowMat.opacity = shadowOpacity;
+                shadowPlane.position.x = chairGroup.position.x;
+                shadowPlane.position.z = chairGroup.position.z;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            let breathingTween = gsap.to(chairGroup.position, {
+                y: "+=0.3",
+                duration: 2,
+                yoyo: true,
+                repeat: -1,
+                ease: "sine.inOut",
+                paused: true
+            });
+
+            // 1. Hero -> Brand Intro
+            ScrollTrigger.create({
+                trigger: ".brand-intro",
+                start: "top center",
+                onEnter: () => {
+                    autoRotate = false;
+                    breathingTween.play();
+                    gsap.to(scrollRotation, {y: -0.2, duration: 1.5, ease: "power2.out"}); 
+                },
+                onLeaveBack: () => {
+                    autoRotate = true;
+                    breathingTween.pause();
+                    gsap.to(chairGroup.position, {y: -0.5, duration: 1});
+                    gsap.to(scrollRotation, {x: 0, z: 0, duration: 1});
+                }
+            });
+
+            // 2. Category Grid material morphing timeline
+            let catTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".category-grid",
+                    start: "top center",
+                    end: "bottom center",
+                    scrub: true
+                }
+            });
+
+            catTl.to({}, {
+                duration: 0.25, 
+                onStart: () => {
+                    changeChairMaterial(matWood);
+                    gsap.to(spotLight.color, { r: 1.0, g: 0.92, b: 0.8, duration: 0.5 });
+                }, 
+                onReverseComplete: () => {
+                    changeChairMaterial(matDefault);
+                    gsap.to(spotLight.color, { r: 1.0, g: 0.94, b: 0.87, duration: 0.5 });
+                }
+            }, 0);
+            
+            catTl.to(chairGroup.scale, {x: 0.8, y: 0.8, z: 0.8, duration: 0.25}, 0.25);
+            catTl.to(partMat, {opacity: 1, duration: 0.25}, 0.25);
+            catTl.to(spotLight, {intensity: 2.2, duration: 0.25}, 0.25);
+            
+            catTl.to({}, {
+                duration: 0.25, 
+                onStart: () => {
+                    changeChairMaterial(matWhite);
+                    gsap.to(spotLight.color, { r: 1.0, g: 1.0, b: 1.0, duration: 0.5 });
+                    gsap.to(spotLight, {intensity: 1.3, duration: 0.5});
+                }, 
+                onReverseComplete: () => {
+                    changeChairMaterial(matWood);
+                    gsap.to(spotLight.color, { r: 1.0, g: 0.92, b: 0.8, duration: 0.5 });
+                    gsap.to(spotLight, {intensity: 2.2, duration: 0.5});
+                }
+            }, 0.50);
+            catTl.to(chairGroup.scale, {x: 1.1, y: 1.1, z: 1.1, duration: 0.25}, 0.50);
+            catTl.to(partMat, {opacity: 0, duration: 0.25}, 0.50);
+            
+            catTl.to({}, {
+                duration: 0.25, 
+                onStart: () => {
+                    changeChairMaterial(matWicker);
+                    gsap.to(spotLight.color, { r: 1.0, g: 0.95, b: 0.88, duration: 0.5 });
+                    gsap.to(spotLight, {intensity: 1.6, duration: 0.5});
+                }, 
+                onReverseComplete: () => {
+                    changeChairMaterial(matWhite);
+                    gsap.to(spotLight.color, { r: 1.0, g: 1.0, b: 1.0, duration: 0.5 });
+                    gsap.to(spotLight, {intensity: 1.3, duration: 0.5});
+                }
+            }, 0.75);
+
+            // 3. Contract Banner
+            ScrollTrigger.create({
+                trigger: ".contract-banner",
+                start: "top 60%",
+                onEnter: () => {
+                    gsap.to(scrollRotation, {x: 0.4, z: -0.2, duration: 1});
+                    swappableMeshes.forEach(mesh => {
+                        mesh.material.transparent = true;
+                        gsap.to(mesh.material, {opacity: 0.15, duration: 1});
+                    });
+                    matMetal.transparent = true;
+                    gsap.to(matMetal, {opacity: 0.15, duration: 1});
+                },
+                onLeaveBack: () => {
+                    gsap.to(scrollRotation, {x: 0, z: 0, duration: 1});
+                    swappableMeshes.forEach(mesh => {
+                        gsap.to(mesh.material, {opacity: 1, duration: 1, onComplete: () => mesh.material.transparent = false});
+                    });
+                    gsap.to(matMetal, {opacity: 1, duration: 1, onComplete: () => matMetal.transparent = false});
+                }
+            });
+
+            // 4. Newsletter
+            ScrollTrigger.create({
+                trigger: ".newsletter",
+                start: "top center",
+                onEnter: () => gsap.to(canvas, {opacity: 0, duration: 1}),
+                onLeaveBack: () => gsap.to(canvas, {opacity: 1, duration: 1})
+            });
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+    </script>
+</body>
+</html>
