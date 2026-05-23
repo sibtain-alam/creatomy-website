@@ -283,8 +283,7 @@ header.hide {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 50;
-    mix-blend-mode: multiply;
+    z-index: 70;
 }
 
 #mobile-chair {
@@ -294,10 +293,9 @@ header.hide {
     transform: translateY(-50%);
     width: 260px;
     max-width: 45vw;
-    z-index: 50;
+    z-index: 70;
     pointer-events: none;
     transition: opacity 0.5s;
-    mix-blend-mode: multiply;
     opacity: 0.9;
 }
 
