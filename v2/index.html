@@ -17,7 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <!-- Link Custom Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body>
 
@@ -252,33 +252,334 @@
             });
         });
 
-        // --- 4. 3D Scroll Experience (WebGL Desktop / Parallax PNG Mobile) ---
-        const isMobile = window.innerWidth <= 900;
+        // --- 4. 3D Scroll Experience (WebGL Interactive on all devices) ---
+        let isMobile = window.innerWidth <= 900;
         const canvas = document.getElementById('webgl-canvas');
 
-        if (isMobile) {
-            // Mobile fallback: Disable canvas and create parallax image
-            canvas.style.display = 'none';
+        // Three.js WebGL rendering loop
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 10);
 
-            const mobileImg = document.createElement('img');
-            mobileImg.src = 'chair_render.png';
-            mobileImg.id = 'mobile-chair';
-            document.body.appendChild(mobileImg);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            gsap.registerPlugin(ScrollTrigger);
-            gsap.to(mobileImg, {
-                yPercent: 15,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "body",
-                    start: "top top",
-                    end: "bottom bottom",
-                    scrub: true
-                }
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+        scene.add(ambientLight);
+
+        const spotLight = new THREE.SpotLight(0xfff0dd, 1.5);
+        spotLight.position.set(5, 8, 5);
+        spotLight.angle = Math.PI / 4;
+        spotLight.penumbra = 0.8;
+        scene.add(spotLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.35);
+        dirLight.position.set(-5, 3, -5);
+        scene.add(dirLight);
+
+        const chairGroup = new THREE.Group();
+        spotLight.target = chairGroup;
+
+        const texLoader = new THREE.TextureLoader();
+        texLoader.setCrossOrigin('anonymous');
+        
+        const matDefault = new THREE.MeshPhysicalMaterial({ 
+            color: 0x8d7e6d, 
+            roughness: 0.55, 
+            metalness: 0.15,
+            clearcoat: 0.1,
+            clearcoatRoughness: 0.1
+        });
+        
+        const matWood = new THREE.MeshPhysicalMaterial({ 
+            color: 0x5c4033, 
+            roughness: 0.35, 
+            metalness: 0.05,
+            clearcoat: 0.4,
+            clearcoatRoughness: 0.15
+        });
+        
+        texLoader.load(
+            'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=800&q=80',
+            (texture) => {
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.set(1.5, 1.5);
+                matWood.map = texture;
+                matWood.needsUpdate = true;
+            }
+        );
+
+        const matWhite = new THREE.MeshPhysicalMaterial({ 
+            color: 0xeeeeee, 
+            roughness: 0.85, 
+            metalness: 0.0,
+            clearcoat: 0.0
+        });
+
+        const matWicker = new THREE.MeshPhysicalMaterial({ 
+            color: 0xc19a6b, 
+            roughness: 0.8,
+            metalness: 0.05
+        });
+
+        texLoader.load(
+            'https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?auto=format&fit=crop&w=800&q=80',
+            (texture) => {
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.set(3, 3);
+                matWicker.map = texture;
+                matWicker.needsUpdate = true;
+            }
+        );
+
+        const matMetal = new THREE.MeshPhysicalMaterial({
+            color: 0x8d7e6d, 
+            metalness: 0.85,
+            roughness: 0.25,
+            clearcoat: 0.3
+        });
+
+        // Geometry Components
+        const seatGeom = new THREE.CylinderGeometry(1.2, 1.2, 0.3, 64);
+        const seat = new THREE.Mesh(seatGeom, matDefault);
+        seat.position.y = 0;
+        chairGroup.add(seat);
+
+        const backrestGeom = new THREE.TorusGeometry(1.1, 0.18, 32, 64, Math.PI);
+        const backrest = new THREE.Mesh(backrestGeom, matDefault);
+        backrest.rotation.x = Math.PI / 2;
+        backrest.rotation.z = -Math.PI / 2;
+        backrest.position.set(0, 0.65, 0);
+        chairGroup.add(backrest);
+
+        const framePlateGeom = new THREE.CylinderGeometry(0.9, 0.9, 0.05, 32);
+        const framePlate = new THREE.Mesh(framePlateGeom, matMetal);
+        framePlate.position.y = -0.16;
+        chairGroup.add(framePlate);
+
+        const rodGeom = new THREE.CylinderGeometry(0.035, 0.035, 0.5, 16);
+        const rodCenter = new THREE.Mesh(rodGeom, matMetal);
+        rodCenter.position.set(0, 0.35, -1.1);
+        
+        const rodLeft = new THREE.Mesh(rodGeom, matMetal);
+        rodLeft.position.set(-1.1 * Math.sin(Math.PI / 4), 0.35, -1.1 * Math.cos(Math.PI / 4));
+        
+        const rodRight = new THREE.Mesh(rodGeom, matMetal);
+        rodRight.position.set(1.1 * Math.sin(Math.PI / 4), 0.35, -1.1 * Math.cos(Math.PI / 4));
+
+        chairGroup.add(rodCenter, rodLeft, rodRight);
+
+        function createLeg(x, z, rotX, rotZ) {
+            const legPivot = new THREE.Group();
+            legPivot.position.set(x, -0.18, z);
+            const legGeom = new THREE.CylinderGeometry(0.045, 0.025, 1.1, 16);
+            const legMesh = new THREE.Mesh(legGeom, matMetal);
+            legMesh.position.y = -0.55;
+            legPivot.add(legMesh);
+            legPivot.rotation.x = rotX;
+            legPivot.rotation.z = rotZ;
+            return legPivot;
+        }
+
+        const legFL = createLeg(-0.75, 0.75, 0.22, 0.22);
+        const legFR = createLeg(0.75, 0.75, 0.22, -0.22);
+        const legBL = createLeg(-0.75, -0.75, -0.22, 0.22);
+        const legBR = createLeg(0.75, -0.75, -0.22, -0.22);
+
+        chairGroup.add(legFL, legFR, legBL, legBR);
+
+        const swappableMeshes = [seat, backrest];
+        function changeChairMaterial(newMat) {
+            swappableMeshes.forEach(mesh => {
+                mesh.material = newMat;
             });
+        }
 
-            // Fade opacity to subtle watermark when scrolling past hero
-            gsap.to(mobileImg, {
+        scene.add(chairGroup);
+        
+        // Responsive position and scale initialization
+        chairGroup.position.set(isMobile ? 0 : 3.5, isMobile ? -0.8 : -0.5, 0); 
+        const initScale = isMobile ? 0.7 : 1.0;
+        chairGroup.scale.set(initScale, initScale, initScale);
+        chairGroup.rotation.y = -Math.PI / 4;
+
+        // Particles (Golden Dust)
+        const partGeom = new THREE.BufferGeometry();
+        const partCount = 150;
+        const posArray = new Float32Array(partCount * 3);
+        for(let i=0; i<partCount*3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 6;
+        }
+        partGeom.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const partMat = new THREE.PointsMaterial({
+            size: 0.06,
+            color: 0xd4af37,
+            transparent: true,
+            opacity: 0,
+            blending: THREE.AdditiveBlending
+        });
+        const particles = new THREE.Points(partGeom, partMat);
+        chairGroup.add(particles);
+
+        // Contact Shadow Plane
+        const shadowCanvas = document.createElement('canvas');
+        shadowCanvas.width = 256;
+        shadowCanvas.height = 256;
+        const shadowCtx = shadowCanvas.getContext('2d');
+        const gradient = shadowCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 0.6)');
+        gradient.addColorStop(0.3, 'rgba(0, 0, 0, 0.4)');
+        gradient.addColorStop(0.8, 'rgba(0, 0, 0, 0.08)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        shadowCtx.fillStyle = gradient;
+        shadowCtx.fillRect(0, 0, 256, 256);
+        
+        const shadowTex = new THREE.CanvasTexture(shadowCanvas);
+        const shadowGeo = new THREE.PlaneGeometry(3.5, 3.5);
+        const shadowMat = new THREE.MeshBasicMaterial({
+            map: shadowTex,
+            transparent: true,
+            depthWrite: false
+        });
+        const shadowPlane = new THREE.Mesh(shadowGeo, shadowMat);
+        shadowPlane.rotation.x = -Math.PI / 2;
+        shadowPlane.position.y = isMobile ? -2.1 : -1.8;
+        scene.add(shadowPlane);
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        const scrollRotation = { x: 0, y: -Math.PI / 4, z: 0 };
+        let autoRotate = true;
+        let targetMouseX = 0, targetMouseY = 0;
+        let currentMouseX = 0, currentMouseY = 0;
+        let targetUserRotationY = 0, targetUserRotationX = 0;
+        let userRotationY = 0, userRotationX = 0;
+        let isDragging = false;
+        let previousMouseX = 0, previousMouseY = 0;
+
+        function isHoveringInteractive(e) {
+            if (!e.target) return false;
+            return e.target.closest('a') || e.target.closest('button') || e.target.closest('input') || e.target.closest('form');
+        }
+
+        window.addEventListener('mousedown', (e) => {
+            if (isHoveringInteractive(e)) return;
+            if (isMobile || e.clientX > window.innerWidth * 0.5) {
+                isDragging = true;
+                previousMouseX = e.clientX;
+                previousMouseY = e.clientY;
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            const hoveringInteractive = isHoveringInteractive(e);
+            if (hoveringInteractive) {
+                document.body.style.cursor = 'default';
+            } else if (isMobile || e.clientX > window.innerWidth * 0.5) {
+                document.body.style.cursor = isDragging ? 'grabbing' : 'grab';
+            } else {
+                document.body.style.cursor = 'default';
+            }
+
+            if (isDragging) {
+                const deltaX = e.clientX - previousMouseX;
+                const deltaY = e.clientY - previousMouseY;
+                targetUserRotationY += deltaX * 0.015;
+                targetUserRotationX += deltaY * 0.015;
+                targetUserRotationX = Math.max(-0.5, Math.min(0.5, targetUserRotationX));
+                previousMouseX = e.clientX;
+                previousMouseY = e.clientY;
+            } else {
+                targetMouseX = (e.clientX / window.innerWidth - 0.5) * 0.4;
+                targetMouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            document.body.style.cursor = 'default';
+        });
+
+        // Touch event handlers for mobile gestures
+        window.addEventListener('touchstart', (e) => {
+            if (isHoveringInteractive(e)) return;
+            if (isMobile || e.touches[0].clientX > window.innerWidth * 0.5) {
+                isDragging = true;
+                previousMouseX = e.touches[0].clientX;
+                previousMouseY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const clientX = e.touches[0].clientX;
+            const clientY = e.touches[0].clientY;
+            const deltaX = clientX - previousMouseX;
+            const deltaY = clientY - previousMouseY;
+            
+            targetUserRotationY += deltaX * 0.015;
+            targetUserRotationX += deltaY * 0.015;
+            targetUserRotationX = Math.max(-0.5, Math.min(0.5, targetUserRotationX));
+            
+            previousMouseX = clientX;
+            previousMouseY = clientY;
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+            currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+            userRotationY += (targetUserRotationY - userRotationY) * 0.1;
+            userRotationX += (targetUserRotationX - userRotationX) * 0.1;
+
+            if (autoRotate && !isDragging) {
+                scrollRotation.y += 0.005;
+            }
+
+            chairGroup.rotation.y = scrollRotation.y + userRotationY + (autoRotate ? currentMouseX : currentMouseX * 0.2);
+            chairGroup.rotation.x = scrollRotation.x + userRotationX + (autoRotate ? currentMouseY : currentMouseY * 0.2);
+            chairGroup.rotation.z = scrollRotation.z;
+
+            if(partMat.opacity > 0) {
+                particles.rotation.y -= 0.002;
+                particles.rotation.x += 0.001;
+            }
+
+            const chairY = chairGroup.position.y;
+            const floorY = isMobile ? -2.1 : -1.8;
+            const dist = chairY - floorY;
+            const shadowScale = gsap.utils.mapRange(1.0, 2.0, 1.2, 0.8, dist);
+            const shadowOpacity = gsap.utils.mapRange(1.0, 2.0, 0.7, 0.3, dist);
+            shadowPlane.scale.set(shadowScale, shadowScale, 1);
+            shadowMat.opacity = shadowOpacity;
+            shadowPlane.position.x = chairGroup.position.x;
+            shadowPlane.position.z = chairGroup.position.z;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        let breathingTween = gsap.to(chairGroup.position, {
+            y: () => (isMobile ? "-=0.2" : "+=0.3"),
+            duration: 2,
+            yoyo: true,
+            repeat: -1,
+            ease: "sine.inOut",
+            paused: true
+        });
+
+        let mm = gsap.matchMedia();
+
+        // Mobile specific scroll triggers (fading opacity so it acts as watermark under text)
+        mm.add("(max-width: 900px)", () => {
+            gsap.to(canvas, {
                 opacity: 0.15,
                 scrollTrigger: {
                     trigger: ".brand-intro",
@@ -288,301 +589,26 @@
                 }
             });
 
-            // Hide completely at the newsletter/footer
-            ScrollTrigger.create({
-                trigger: ".newsletter",
-                start: "top center",
-                onEnter: () => gsap.to(mobileImg, {opacity: 0, duration: 0.3}),
-                onLeaveBack: () => gsap.to(mobileImg, {opacity: 0.15, duration: 0.3})
-            });
-
-        } else {
-            // Desktop Three.js WebGL rendering loop
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.set(0, 0, 10);
-
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
-            scene.add(ambientLight);
-
-            const spotLight = new THREE.SpotLight(0xfff0dd, 1.5);
-            spotLight.position.set(5, 8, 5);
-            spotLight.angle = Math.PI / 4;
-            spotLight.penumbra = 0.8;
-            scene.add(spotLight);
-
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.35);
-            dirLight.position.set(-5, 3, -5);
-            scene.add(dirLight);
-
-            const chairGroup = new THREE.Group();
-            spotLight.target = chairGroup;
-
-            const texLoader = new THREE.TextureLoader();
-            texLoader.setCrossOrigin('anonymous');
-            
-            const matDefault = new THREE.MeshPhysicalMaterial({ 
-                color: 0x8d7e6d, 
-                roughness: 0.55, 
-                metalness: 0.15,
-                clearcoat: 0.1,
-                clearcoatRoughness: 0.1
-            });
-            
-            const matWood = new THREE.MeshPhysicalMaterial({ 
-                color: 0x5c4033, 
-                roughness: 0.35, 
-                metalness: 0.05,
-                clearcoat: 0.4,
-                clearcoatRoughness: 0.15
-            });
-            
-            texLoader.load(
-                'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=800&q=80',
-                (texture) => {
-                    texture.wrapS = THREE.RepeatWrapping;
-                    texture.wrapT = THREE.RepeatWrapping;
-                    texture.repeat.set(1.5, 1.5);
-                    matWood.map = texture;
-                    matWood.needsUpdate = true;
-                }
-            );
-
-            const matWhite = new THREE.MeshPhysicalMaterial({ 
-                color: 0xeeeeee, 
-                roughness: 0.85, 
-                metalness: 0.0,
-                clearcoat: 0.0
-            });
-
-            const matWicker = new THREE.MeshPhysicalMaterial({ 
-                color: 0xc19a6b, 
-                roughness: 0.8,
-                metalness: 0.05
-            });
-
-            texLoader.load(
-                'https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?auto=format&fit=crop&w=800&q=80',
-                (texture) => {
-                    texture.wrapS = THREE.RepeatWrapping;
-                    texture.wrapT = THREE.RepeatWrapping;
-                    texture.repeat.set(3, 3);
-                    matWicker.map = texture;
-                    matWicker.needsUpdate = true;
-                }
-            );
-
-            const matMetal = new THREE.MeshPhysicalMaterial({
-                color: 0x8d7e6d, 
-                metalness: 0.85,
-                roughness: 0.25,
-                clearcoat: 0.3
-            });
-
-            // Geometry Components
-            const seatGeom = new THREE.CylinderGeometry(1.2, 1.2, 0.3, 64);
-            const seat = new THREE.Mesh(seatGeom, matDefault);
-            seat.position.y = 0;
-            chairGroup.add(seat);
-
-            const backrestGeom = new THREE.TorusGeometry(1.1, 0.18, 32, 64, Math.PI);
-            const backrest = new THREE.Mesh(backrestGeom, matDefault);
-            backrest.rotation.x = Math.PI / 2;
-            backrest.rotation.z = -Math.PI / 2;
-            backrest.position.set(0, 0.65, 0);
-            chairGroup.add(backrest);
-
-            const framePlateGeom = new THREE.CylinderGeometry(0.9, 0.9, 0.05, 32);
-            const framePlate = new THREE.Mesh(framePlateGeom, matMetal);
-            framePlate.position.y = -0.16;
-            chairGroup.add(framePlate);
-
-            const rodGeom = new THREE.CylinderGeometry(0.035, 0.035, 0.5, 16);
-            const rodCenter = new THREE.Mesh(rodGeom, matMetal);
-            rodCenter.position.set(0, 0.35, -1.1);
-            
-            const rodLeft = new THREE.Mesh(rodGeom, matMetal);
-            rodLeft.position.set(-1.1 * Math.sin(Math.PI / 4), 0.35, -1.1 * Math.cos(Math.PI / 4));
-            
-            const rodRight = new THREE.Mesh(rodGeom, matMetal);
-            rodRight.position.set(1.1 * Math.sin(Math.PI / 4), 0.35, -1.1 * Math.cos(Math.PI / 4));
-
-            chairGroup.add(rodCenter, rodLeft, rodRight);
-
-            function createLeg(x, z, rotX, rotZ) {
-                const legPivot = new THREE.Group();
-                legPivot.position.set(x, -0.18, z);
-                const legGeom = new THREE.CylinderGeometry(0.045, 0.025, 1.1, 16);
-                const legMesh = new THREE.Mesh(legGeom, matMetal);
-                legMesh.position.y = -0.55;
-                legPivot.add(legMesh);
-                legPivot.rotation.x = rotX;
-                legPivot.rotation.z = rotZ;
-                return legPivot;
-            }
-
-            const legFL = createLeg(-0.75, 0.75, 0.22, 0.22);
-            const legFR = createLeg(0.75, 0.75, 0.22, -0.22);
-            const legBL = createLeg(-0.75, -0.75, -0.22, 0.22);
-            const legBR = createLeg(0.75, -0.75, -0.22, -0.22);
-
-            chairGroup.add(legFL, legFR, legBL, legBR);
-
-            const swappableMeshes = [seat, backrest];
-            function changeChairMaterial(newMat) {
-                swappableMeshes.forEach(mesh => {
-                    mesh.material = newMat;
-                });
-            }
-
-            scene.add(chairGroup);
-            chairGroup.position.set(3.5, -0.5, 0); 
-            chairGroup.rotation.y = -Math.PI / 4;
-
-            // Particles (Golden Dust)
-            const partGeom = new THREE.BufferGeometry();
-            const partCount = 150;
-            const posArray = new Float32Array(partCount * 3);
-            for(let i=0; i<partCount*3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 6;
-            }
-            partGeom.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            const partMat = new THREE.PointsMaterial({
-                size: 0.06,
-                color: 0xd4af37,
-                transparent: true,
-                opacity: 0,
-                blending: THREE.AdditiveBlending
-            });
-            const particles = new THREE.Points(partGeom, partMat);
-            chairGroup.add(particles);
-
-            // Contact Shadow Plane
-            const shadowCanvas = document.createElement('canvas');
-            shadowCanvas.width = 256;
-            shadowCanvas.height = 256;
-            const shadowCtx = shadowCanvas.getContext('2d');
-            const gradient = shadowCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
-            gradient.addColorStop(0, 'rgba(0, 0, 0, 0.6)');
-            gradient.addColorStop(0.3, 'rgba(0, 0, 0, 0.4)');
-            gradient.addColorStop(0.8, 'rgba(0, 0, 0, 0.08)');
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            shadowCtx.fillStyle = gradient;
-            shadowCtx.fillRect(0, 0, 256, 256);
-            
-            const shadowTex = new THREE.CanvasTexture(shadowCanvas);
-            const shadowGeo = new THREE.PlaneGeometry(3.5, 3.5);
-            const shadowMat = new THREE.MeshBasicMaterial({
-                map: shadowTex,
-                transparent: true,
-                depthWrite: false
-            });
-            const shadowPlane = new THREE.Mesh(shadowGeo, shadowMat);
-            shadowPlane.rotation.x = -Math.PI / 2;
-            shadowPlane.position.y = -1.8;
-            scene.add(shadowPlane);
-
-            gsap.registerPlugin(ScrollTrigger);
-
-            const scrollRotation = { x: 0, y: -Math.PI / 4, z: 0 };
-            let autoRotate = true;
-            let targetMouseX = 0, targetMouseY = 0;
-            let currentMouseX = 0, currentMouseY = 0;
-            let targetUserRotationY = 0, targetUserRotationX = 0;
-            let userRotationY = 0, userRotationX = 0;
-            let isDragging = false;
-            let previousMouseX = 0, previousMouseY = 0;
-
-            function isHoveringInteractive(e) {
-                if (!e.target) return false;
-                return e.target.closest('a') || e.target.closest('button') || e.target.closest('input');
-            }
-
-            window.addEventListener('mousedown', (e) => {
-                if (isHoveringInteractive(e)) return;
-                if (e.clientX > window.innerWidth * 0.5) {
-                    isDragging = true;
-                    previousMouseX = e.clientX;
-                    previousMouseY = e.clientY;
+            gsap.to(canvas, {
+                opacity: 1.0,
+                scrollTrigger: {
+                    trigger: ".category-grid",
+                    start: "top center",
+                    end: "top 20%",
+                    scrub: true
                 }
             });
 
-            window.addEventListener('mousemove', (e) => {
-                const hoveringInteractive = isHoveringInteractive(e);
-                if (hoveringInteractive) {
-                    document.body.style.cursor = 'default';
-                } else if (e.clientX > window.innerWidth * 0.5) {
-                    document.body.style.cursor = isDragging ? 'grabbing' : 'grab';
-                } else {
-                    document.body.style.cursor = 'default';
-                }
-
-                if (isDragging) {
-                    const deltaX = e.clientX - previousMouseX;
-                    const deltaY = e.clientY - previousMouseY;
-                    targetUserRotationY += deltaX * 0.015;
-                    targetUserRotationX += deltaY * 0.015;
-                    targetUserRotationX = Math.max(-0.5, Math.min(0.5, targetUserRotationX));
-                    previousMouseX = e.clientX;
-                    previousMouseY = e.clientY;
-                } else {
-                    targetMouseX = (e.clientX / window.innerWidth - 0.5) * 0.4;
-                    targetMouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
+            gsap.to(canvas, {
+                opacity: 0.15,
+                scrollTrigger: {
+                    trigger: ".best-sellers",
+                    start: "top center",
+                    end: "top 20%",
+                    scrub: true
                 }
             });
 
-            window.addEventListener('mouseup', () => {
-                isDragging = false;
-                document.body.style.cursor = 'default';
-            });
-
-            function animate() {
-                requestAnimationFrame(animate);
-                currentMouseX += (targetMouseX - currentMouseX) * 0.05;
-                currentMouseY += (targetMouseY - currentMouseY) * 0.05;
-                userRotationY += (targetUserRotationY - userRotationY) * 0.1;
-                userRotationX += (targetUserRotationX - userRotationX) * 0.1;
-
-                if (autoRotate && !isDragging) {
-                    scrollRotation.y += 0.005;
-                }
-
-                chairGroup.rotation.y = scrollRotation.y + userRotationY + (autoRotate ? currentMouseX : currentMouseX * 0.2);
-                chairGroup.rotation.x = scrollRotation.x + userRotationX + (autoRotate ? currentMouseY : currentMouseY * 0.2);
-                chairGroup.rotation.z = scrollRotation.z;
-
-                if(partMat.opacity > 0) {
-                    particles.rotation.y -= 0.002;
-                    particles.rotation.x += 0.001;
-                }
-
-                const chairY = chairGroup.position.y;
-                const dist = chairY - (-1.8);
-                const shadowScale = gsap.utils.mapRange(1.0, 2.0, 1.2, 0.8, dist);
-                const shadowOpacity = gsap.utils.mapRange(1.0, 2.0, 0.7, 0.3, dist);
-                shadowPlane.scale.set(shadowScale, shadowScale, 1);
-                shadowMat.opacity = shadowOpacity;
-                shadowPlane.position.x = chairGroup.position.x;
-                shadowPlane.position.z = chairGroup.position.z;
-
-                renderer.render(scene, camera);
-            }
-            animate();
-
-            let breathingTween = gsap.to(chairGroup.position, {
-                y: "+=0.3",
-                duration: 2,
-                yoyo: true,
-                repeat: -1,
-                ease: "sine.inOut",
-                paused: true
-            });
-
-            // 1. Hero -> Brand Intro
             ScrollTrigger.create({
                 trigger: ".brand-intro",
                 start: "top center",
@@ -594,103 +620,142 @@
                 onLeaveBack: () => {
                     autoRotate = true;
                     breathingTween.pause();
-                    gsap.to(chairGroup.position, {y: -0.5, duration: 1});
-                    gsap.to(scrollRotation, {x: 0, z: 0, duration: 1});
+                    gsap.to(chairGroup.position, {x: 0, y: -0.8, z: 0, duration: 1});
+                    gsap.to(scrollRotation, {x: 0, y: -Math.PI / 4, z: 0, duration: 1});
                 }
             });
+        });
 
-            // 2. Category Grid material morphing timeline
-            let catTl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: ".category-grid",
-                    start: "top center",
-                    end: "bottom center",
-                    scrub: true
-                }
-            });
-
-            catTl.to({}, {
-                duration: 0.25, 
-                onStart: () => {
-                    changeChairMaterial(matWood);
-                    gsap.to(spotLight.color, { r: 1.0, g: 0.92, b: 0.8, duration: 0.5 });
-                }, 
-                onReverseComplete: () => {
-                    changeChairMaterial(matDefault);
-                    gsap.to(spotLight.color, { r: 1.0, g: 0.94, b: 0.87, duration: 0.5 });
-                }
-            }, 0);
-            
-            catTl.to(chairGroup.scale, {x: 0.8, y: 0.8, z: 0.8, duration: 0.25}, 0.25);
-            catTl.to(partMat, {opacity: 1, duration: 0.25}, 0.25);
-            catTl.to(spotLight, {intensity: 2.2, duration: 0.25}, 0.25);
-            
-            catTl.to({}, {
-                duration: 0.25, 
-                onStart: () => {
-                    changeChairMaterial(matWhite);
-                    gsap.to(spotLight.color, { r: 1.0, g: 1.0, b: 1.0, duration: 0.5 });
-                    gsap.to(spotLight, {intensity: 1.3, duration: 0.5});
-                }, 
-                onReverseComplete: () => {
-                    changeChairMaterial(matWood);
-                    gsap.to(spotLight.color, { r: 1.0, g: 0.92, b: 0.8, duration: 0.5 });
-                    gsap.to(spotLight, {intensity: 2.2, duration: 0.5});
-                }
-            }, 0.50);
-            catTl.to(chairGroup.scale, {x: 1.1, y: 1.1, z: 1.1, duration: 0.25}, 0.50);
-            catTl.to(partMat, {opacity: 0, duration: 0.25}, 0.50);
-            
-            catTl.to({}, {
-                duration: 0.25, 
-                onStart: () => {
-                    changeChairMaterial(matWicker);
-                    gsap.to(spotLight.color, { r: 1.0, g: 0.95, b: 0.88, duration: 0.5 });
-                    gsap.to(spotLight, {intensity: 1.6, duration: 0.5});
-                }, 
-                onReverseComplete: () => {
-                    changeChairMaterial(matWhite);
-                    gsap.to(spotLight.color, { r: 1.0, g: 1.0, b: 1.0, duration: 0.5 });
-                    gsap.to(spotLight, {intensity: 1.3, duration: 0.5});
-                }
-            }, 0.75);
-
-            // 3. Contract Banner
+        // Desktop specific scroll triggers
+        mm.add("(min-width: 901px)", () => {
             ScrollTrigger.create({
-                trigger: ".contract-banner",
-                start: "top 60%",
+                trigger: ".brand-intro",
+                start: "top center",
                 onEnter: () => {
-                    gsap.to(scrollRotation, {x: 0.4, z: -0.2, duration: 1});
-                    swappableMeshes.forEach(mesh => {
-                        mesh.material.transparent = true;
-                        gsap.to(mesh.material, {opacity: 0.15, duration: 1});
-                    });
-                    matMetal.transparent = true;
-                    gsap.to(matMetal, {opacity: 0.15, duration: 1});
+                    autoRotate = false;
+                    breathingTween.play();
+                    gsap.to(scrollRotation, {y: -0.2, duration: 1.5, ease: "power2.out"}); 
                 },
                 onLeaveBack: () => {
-                    gsap.to(scrollRotation, {x: 0, z: 0, duration: 1});
-                    swappableMeshes.forEach(mesh => {
-                        gsap.to(mesh.material, {opacity: 1, duration: 1, onComplete: () => mesh.material.transparent = false});
-                    });
-                    gsap.to(matMetal, {opacity: 1, duration: 1, onComplete: () => matMetal.transparent = false});
+                    autoRotate = true;
+                    breathingTween.pause();
+                    gsap.to(chairGroup.position, {x: 3.5, y: -0.5, z: 0, duration: 1});
+                    gsap.to(scrollRotation, {x: 0, y: -Math.PI / 4, z: 0, duration: 1});
                 }
             });
+        });
 
-            // 4. Newsletter
-            ScrollTrigger.create({
-                trigger: ".newsletter",
+        // Material morph scrubbing (common)
+        let catTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".category-grid",
                 start: "top center",
-                onEnter: () => gsap.to(canvas, {opacity: 0, duration: 1}),
-                onLeaveBack: () => gsap.to(canvas, {opacity: 1, duration: 1})
-            });
+                end: "bottom center",
+                scrub: true,
+                invalidateOnRefresh: true
+            }
+        });
 
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        }
+        catTl.to({}, {
+            duration: 0.25, 
+            onStart: () => {
+                changeChairMaterial(matWood);
+                gsap.to(spotLight.color, { r: 1.0, g: 0.92, b: 0.8, duration: 0.5 });
+            }, 
+            onReverseComplete: () => {
+                changeChairMaterial(matDefault);
+                gsap.to(spotLight.color, { r: 1.0, g: 0.94, b: 0.87, duration: 0.5 });
+            }
+        }, 0);
+        
+        catTl.to(chairGroup.scale, {
+            x: () => (isMobile ? 0.7 * 0.8 : 1.0 * 0.8),
+            y: () => (isMobile ? 0.7 * 0.8 : 1.0 * 0.8),
+            z: () => (isMobile ? 0.7 * 0.8 : 1.0 * 0.8),
+            duration: 0.25
+        }, 0.25);
+        catTl.to(partMat, {opacity: 1, duration: 0.25}, 0.25);
+        catTl.to(spotLight, {intensity: 2.2, duration: 0.25}, 0.25);
+        
+        catTl.to({}, {
+            duration: 0.25, 
+            onStart: () => {
+                changeChairMaterial(matWhite);
+                gsap.to(spotLight.color, { r: 1.0, g: 1.0, b: 1.0, duration: 0.5 });
+                gsap.to(spotLight, {intensity: 1.3, duration: 0.5});
+            }, 
+            onReverseComplete: () => {
+                changeChairMaterial(matWood);
+                gsap.to(spotLight.color, { r: 1.0, g: 0.92, b: 0.8, duration: 0.5 });
+                gsap.to(spotLight, {intensity: 2.2, duration: 0.5});
+            }
+        }, 0.50);
+        catTl.to(chairGroup.scale, {
+            x: () => (isMobile ? 0.7 * 1.1 : 1.0 * 1.1),
+            y: () => (isMobile ? 0.7 * 1.1 : 1.0 * 1.1),
+            z: () => (isMobile ? 0.7 * 1.1 : 1.0 * 1.1),
+            duration: 0.25
+        }, 0.50);
+        catTl.to(partMat, {opacity: 0, duration: 0.25}, 0.50);
+        
+        catTl.to({}, {
+            duration: 0.25, 
+            onStart: () => {
+                changeChairMaterial(matWicker);
+                gsap.to(spotLight.color, { r: 1.0, g: 0.95, b: 0.88, duration: 0.5 });
+                gsap.to(spotLight, {intensity: 1.6, duration: 0.5});
+            }, 
+            onReverseComplete: () => {
+                changeChairMaterial(matWhite);
+                gsap.to(spotLight.color, { r: 1.0, g: 1.0, b: 1.0, duration: 0.5 });
+                gsap.to(spotLight, {intensity: 1.3, duration: 0.5});
+            }
+        }, 0.75);
+
+        // Contract Banner (opacity and visual morph)
+        ScrollTrigger.create({
+            trigger: ".contract-banner",
+            start: "top 60%",
+            onEnter: () => {
+                gsap.to(scrollRotation, {x: 0.4, z: -0.2, duration: 1});
+                swappableMeshes.forEach(mesh => {
+                    mesh.material.transparent = true;
+                    gsap.to(mesh.material, {opacity: 0.15, duration: 1});
+                });
+                matMetal.transparent = true;
+                gsap.to(matMetal, {opacity: 0.15, duration: 1});
+            },
+            onLeaveBack: () => {
+                gsap.to(scrollRotation, {x: 0, z: 0, duration: 1});
+                swappableMeshes.forEach(mesh => {
+                    gsap.to(mesh.material, {opacity: 1, duration: 1, onComplete: () => mesh.material.transparent = false});
+                });
+                gsap.to(matMetal, {opacity: 1, duration: 1, onComplete: () => matMetal.transparent = false});
+            }
+        });
+
+        // Newsletter fadeout (common)
+        ScrollTrigger.create({
+            trigger: ".newsletter",
+            start: "top center",
+            onEnter: () => gsap.to(canvas, {opacity: 0, duration: 0.5}),
+            onLeaveBack: () => gsap.to(canvas, {opacity: () => (isMobile ? 0.15 : 1.0), duration: 0.5})
+        });
+
+        window.addEventListener('resize', () => {
+            isMobile = window.innerWidth <= 900;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Dynamically update responsive positions and scales
+            chairGroup.position.set(isMobile ? 0 : 3.5, isMobile ? -0.8 : -0.5, 0);
+            const currentScale = isMobile ? 0.7 : 1.0;
+            chairGroup.scale.set(currentScale, currentScale, currentScale);
+            shadowPlane.position.y = isMobile ? -2.1 : -1.8;
+
+            ScrollTrigger.refresh();
+        });
     </script>
 </body>
 </html>
